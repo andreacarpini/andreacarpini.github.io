@@ -43,7 +43,7 @@
             text-decoration: none;
             border-bottom: 2px solid #1c1b1b;
             padding-bottom: 3px;
-            -webkit-touch-callout: none; /* Prevents iOS selection popup */
+            -webkit-touch-callout: none;
         }
         
         .glitch-text {
@@ -52,7 +52,7 @@
             animation: glitch 9s infinite;
             -webkit-transform: translateZ(0);
             transform: translateZ(0);
-            will-change: transform, opacity; /* ★ Ultra-smooth glitch performance */
+            will-change: transform, opacity;
         }
         
         .signature {
@@ -64,16 +64,19 @@
             opacity: .7;
             transition: opacity 0.3s ease;
             z-index: 10;
-                line-height: 1; /* Ensure consistent line height */
-    margin: 0; /* Remove any default margins */
-    padding: 0; /* Remove any default padding */
+            line-height: 1;
+            margin: 0;
+            padding: 0;
+            /* iOS SPECIFIC FIX */
+            -webkit-transform: translateZ(0); /* Force GPU rendering */
+            transform: translateZ(0);
         }
         
         .signature:hover {
             opacity: 1;
         }
 
-        /* Switched state - PERFECTED positioning */
+        /* Switched state */
         .switched .container {
             position: fixed;
             bottom: 23px;
@@ -82,6 +85,9 @@
             width: auto;
             left: auto;
             transform: none;
+            /* iOS SPECIFIC FIX */
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
         }
         
         .switched .signature {
@@ -90,7 +96,6 @@
             text-align: center;
             width: 100%;
             display: block;
-            
         }
         
         @keyframes glitch {
@@ -126,6 +131,8 @@
             }
             .signature, .switched .container {
                 bottom: 25px;
+                /* iOS PRECISION ALIGNMENT */
+                right: 20px !important; /* Force exact positioning */
             }
         }
 
@@ -138,10 +145,6 @@
             color: #fff;
         }
 
-        /* Temporary debug */
-.signature, .switched .container {
-    border: 1px solid red; /* Visual alignment check */
-}
     </style>
 </head>
 <body>
@@ -165,4 +168,4 @@
         });
     </script>
 </body>
-</html
+</html>
