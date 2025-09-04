@@ -27,6 +27,11 @@
             padding: 0;
         }
         
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+        
         body {
             background: var(--surface);
             color: var(--on-surface);
@@ -34,15 +39,13 @@
             display: grid;
             place-items: center;
             min-height: 100vh;
-            height: 100%;
-            overflow: hidden;
+            padding: 20px;
         }
         
         .group {
             display: grid;
             gap: 10px;
             text-align: center;
-            padding: 20px;
         }
         
         .zeta {
@@ -63,6 +66,13 @@
             color: var(--muted);
             letter-spacing: 0.02em;
             font-weight: 300;
+        }
+
+        /* Prevent horizontal scroll on mobile */
+        @media (max-width: 768px) {
+            body {
+                overflow-x: hidden;
+            }
         }
     </style>
 </head>
