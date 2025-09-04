@@ -30,6 +30,7 @@
         html, body {
             height: 100%;
             width: 100%;
+            overflow: hidden; /* Prevent scroll on root elements */
         }
         
         body {
@@ -38,14 +39,17 @@
             font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
             display: grid;
             place-items: center;
-            min-height: 100vh;
-            padding: 20px;
+            height: 100vh; /* Use vh without min-height */
+            padding: 0; /* Remove body padding */
+            margin: 0;
         }
         
         .group {
             display: grid;
             gap: 10px;
             text-align: center;
+            padding: 20px; /* Padding moved here */
+            border: 1px solid transparent; /* Contains padding properly */
         }
         
         .zeta {
@@ -66,13 +70,6 @@
             color: var(--muted);
             letter-spacing: 0.02em;
             font-weight: 300;
-        }
-
-        /* Prevent horizontal scroll on mobile */
-        @media (max-width: 768px) {
-            body {
-                overflow-x: hidden;
-            }
         }
     </style>
 </head>
