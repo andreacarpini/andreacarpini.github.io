@@ -2,24 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Andrew K</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>andrew k</title>
     <style>
         :root {
-            --bg-color: #fff;
-            --text-color: #1c1b1b;
-            --accent-color: #1c1b1b;
-            --muted-color: #aaa;
-            --cursor-color: #1c1b1b;
-            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --surface: #ffffff;
+            --on-surface: #000000;
+            --accent: #000000;
+            --muted: #666666;
         }
 
         @media (prefers-color-scheme: dark) {
             :root {
-                --bg-color: #1c1b1b;
-                --text-color: #fff;
-                --accent-color: #fff;
-                --cursor-color: #fff;
+                --surface: #000000;
+                --on-surface: #ffffff;
+                --accent: #ffffff;
+                --muted: #aaaaaa;
             }
         }
         
@@ -30,193 +28,46 @@
         }
         
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: var(--font-main);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            background: var(--surface);
+            color: var(--on-surface);
+            font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            display: grid;
+            place-items: center;
             min-height: 100vh;
-            min-height: 100dvh;
-            padding: 1.25rem;
-            opacity: 0;
-            animation: fadeIn 1.5s ease-in forwards;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            line-height: 1.5;
+            padding: 20px;
         }
         
-        main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
+        .group {
+            display: grid;
+            gap: 2px;
             text-align: center;
         }
         
-        .typing-container {
-            position: relative;
-            margin: 1.25rem 0;
-            width: 100%;
-            max-width: 37.5rem;
+        .zeta {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 0.02em;
+            border-bottom: 1px solid var(--accent);
+            padding-bottom: 1px;
+            display: inline-block;
+            width: fit-content;
+            margin: 0 auto;
+            font-weight: 300;
         }
         
-        .textarea-wrapper {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            max-height: 50vh;
-            overflow-y: auto;
-            padding: 0.625rem 0;
-        }
-        
-        #message-input {
-            width: 100%;
-            background: transparent;
-            border: none;
-            color: var(--text-color);
-            font-family: var(--font-main);
-            font-size: 1.125rem;
-            text-align: center;
-            resize: none;
-            outline: none;
-            caret-color: var(--cursor-color);
-            padding: 0;
-            overflow: auto;
-            min-height: 1.8rem;
-            line-height: inherit;
-        }
-        
-        #message-input::placeholder {
-            color: var(--muted-color);
-            text-align: center;
-            opacity: 1;
-        }
-        
-        .instructions {
-            color: var(--muted-color);
-            font-size: 0.75rem;
-            margin-top: 0.625rem;
-            opacity: 0.7;
-            transition: opacity 0.3s ease;
-        }
-        
-        .signature {
-            margin-top: auto;
-            padding: 0;
-            font-size: 0.75rem;
-            color: var(--muted-color);
-            opacity: 0.7;
-            transition: opacity 0.3s ease;
-            text-align: center;
-            width: 100%;
-        }
-        
-        .signature:hover {
-            opacity: 1;
-        }
-
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-
-        @media (max-width: 480px) {
-            body {
-                padding: 0.9375rem;
-            }
-            
-            #message-input {
-                font-size: 1rem;
-            }
-            
-            .typing-container {
-                margin: 0.9375rem 0;
-            }
+        .omega {
+            font-size: 13px;
+            color: var(--muted);
+            letter-spacing: 0.02em;
+            font-weight: 300;
         }
     </style>
 </head>
 <body>
-    <main>
-        <div class="typing-container">
-            <div class="textarea-wrapper">
-                <textarea id="message-input" placeholder="" autofocus></textarea>
-            </div>
-            <p class="instructions" id="instructions">contact me</p>
-        </div>
-    </main>
-    <footer class="signature">andrew karpensky</footer>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const messageInput = document.getElementById('message-input');
-            const instructions = document.getElementById('instructions');
-            
-            // Focus the textarea when page loads and move cursor to end
-            function focusTextarea() {
-                messageInput.focus();
-                const length = messageInput.value.length;
-                messageInput.setSelectionRange(length, length);
-            }
-            
-            // Update instructions based on input
-            function updateInstructions() {
-                instructions.textContent = messageInput.value.trim().length > 0 ? 
-                    "press enter to send" : "contact me";
-            }
-            
-            // Auto-resize textarea to fit content
-            function autoResize() {
-                messageInput.style.height = 'auto';
-                messageInput.style.height = messageInput.scrollHeight + 'px';
-                updateInstructions();
-            }
-            
-            // Handle Enter key press to send email
-            function handleEnterKey(e) {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    const message = messageInput.value.trim();
-                    
-                    if (message) {
-                        const subject = "message from andreacarpini.github.io";
-                        const body = encodeURIComponent(message);
-                        const mailtoLink = `mailto:untamed-voices-0d@icloud.com?subject=${encodeURIComponent(subject)}&body=${body}`;
-                        
-                        window.location.href = mailtoLink;
-                        messageInput.value = "";
-                        autoResize();
-                        
-                        // Show temporary confirmation
-                        const originalPlaceholder = messageInput.placeholder;
-                        messageInput.placeholder = "redirecting...";
-                        
-                        setTimeout(() => {
-                            messageInput.placeholder = originalPlaceholder;
-                            focusTextarea();
-                        }, 2000);
-                    }
-                }
-            }
-            
-            // Initialize and set up event listeners
-            function init() {
-                focusTextarea();
-                autoResize();
-                
-                messageInput.addEventListener('input', autoResize);
-                messageInput.addEventListener('keydown', handleEnterKey);
-                
-                document.addEventListener('click', function(e) {
-                    if (e.target !== messageInput) {
-                        focusTextarea();
-                    }
-                });
-            }
-            
-            init();
-        });
-    </script>
+    <div class="group">
+        <a href="mailto:untamed-voices-0d@icloud.com" class="zeta">contact me</a>
+        <div class="omega">andrew karpensky</div>
+    </div>
 </body>
 </html>
