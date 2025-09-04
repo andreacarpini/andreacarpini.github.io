@@ -30,7 +30,7 @@
         html, body {
             height: 100%;
             width: 100%;
-            overflow: hidden; /* Prevent scroll on root elements */
+            overflow: hidden;
         }
         
         body {
@@ -39,17 +39,22 @@
             font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
             display: grid;
             place-items: center;
-            height: 100vh; /* Use vh without min-height */
-            padding: 0; /* Remove body padding */
+            height: 100dvh; /* Use dynamic viewport height */
+            padding: 0;
             margin: 0;
+            /* Safe area insets for notches and home indicators */
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
         }
         
         .group {
             display: grid;
             gap: 10px;
             text-align: center;
-            padding: 20px; /* Padding moved here */
-            border: 1px solid transparent; /* Contains padding properly */
+            padding: 20px;
+            border: 1px solid transparent;
+            /* Adjust for safe areas if needed */
+            margin-top: calc(env(safe-area-inset-top) / 2);
+            margin-bottom: calc(env(safe-area-inset-bottom) / 2);
         }
         
         .zeta {
@@ -70,6 +75,13 @@
             color: var(--muted);
             letter-spacing: 0.02em;
             font-weight: 300;
+        }
+
+        /* Fallback for older browsers */
+        @supports not (height: 100dvh) {
+            body {
+                height: 100vh;
+            }
         }
     </style>
 </head>
