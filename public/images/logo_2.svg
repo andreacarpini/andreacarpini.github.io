@@ -1,0 +1,8 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 88 88" width="88" height="88">
+	<style>
+		.s0 { fill: #000000 } 
+		.s1 { fill: #ffffff } 
+	</style>
+	<path id="Shape 1" fill-rule="evenodd" class="s0" d="m88 0v88h-88v-88z"/>
+	<path id="▚" class="s1" aria-label="▚"  d="m43.8 43.8h-16.2v-24.4h16.2zm16.3 24.4h-16.3v-24.4h16.3z"/>
+</svg>

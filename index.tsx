@@ -50,6 +50,15 @@ const PROJECTS: Project[] = [
     image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2000&auto=format&fit=crop",
     link: "https://andrew-karpensky.github.io/monolith-ui",
     status: 'in-process'
+  },
+  {
+    id: 5,
+    title: "SheetLabel",
+    description: "Google Sheets add-on for real-time inventory tracking with zero-install mobile scanning. Batch-generates thermal label PDFs and supports offline check-in/check-out sync directly inside the Sheets workflow.",
+    tools: ["Google Apps Script", "Google Sheets API", "Tailwind CSS", "jsPDF + JsBarcode", "PWA"],
+    image: "./images/logo_2.svg",
+    link: "https://sheetlabel.app/",
+    status: 'completed'
   }
 ];
 
