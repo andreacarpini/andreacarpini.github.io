@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Andrew Karpensky | Web Development</title>
+    <title>Andrew Karpensky</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,9 +23,15 @@
       }
 
       /* ── Base ───────────────────────────────────────────── */
+      html, body {
+        overflow: hidden;
+        height: 100%;
+        position: fixed;
+        width: 100%;
+      }
       html { scroll-behavior: smooth; }
       body {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Playfair Display', serif;
         background-color: var(--bg);
         color: var(--ink);
         -webkit-font-smoothing: antialiased;
