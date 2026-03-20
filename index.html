@@ -32,7 +32,7 @@
       html { scroll-behavior: smooth; }
       body {
         font-family: 'Playfair Display', serif;
-        background-color: var(--bg);
+        background-color: #000;
         color: var(--ink);
         -webkit-font-smoothing: antialiased;
       }
@@ -60,7 +60,6 @@
         display: flex;
         flex-direction: column;
         gap: 1rem;
-        border: 1px dashed var(--border-md);
         border-radius: var(--radius-card);
         padding: 1.25rem;
         background-color: var(--bg);
@@ -109,19 +108,6 @@
         object-fit: cover;
         object-position: center 20%;
         flex-shrink: 0;
-      }
-
-      /* ── Center line ─────────────────────────────────────── */
-      .center-line {
-        position: fixed;
-        top: 4.5rem;
-        bottom: 4.5rem;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 1px;
-        border-left: 1px dashed var(--border-md);
-        pointer-events: none;
-        z-index: 0;
       }
 
       /* ── Mobile ─────────────────────────────────────────── */
