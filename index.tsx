@@ -15,62 +15,106 @@ const NameHeading = ({ color }: { color: string }) => (
   </h1>
 );
 
-const Icon = ({ isPlus, color }: { isPlus: boolean; color: string }) => (
-  <svg width="48" height="48" viewBox="0 0 48 48">
-    <rect x="8" y="23" width="32" height="2" rx="1" fill={color}
-      style={{
-        transformBox: 'fill-box', transformOrigin: 'center',
-        transition: 'transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1)',
-        transform: isPlus ? 'scaleX(1)' : 'scaleX(1.12)',
-      }}
-    />
-    <rect x="23" y="8" width="2" height="32" rx="1" fill={color}
-      style={{
-        transformBox: 'fill-box', transformOrigin: 'center',
-        transition: 'transform 0.5s cubic-bezier(0.76, 0, 0.24, 1)',
-        transform: isPlus ? 'scaleY(1)' : 'scaleY(0)',
-      }}
-    />
-  </svg>
-);
+const ContactSlide = ({ color }: { color: string }) => {
+  const dim = color === '#fff' ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.28)';
+  const field: React.CSSProperties = {
+    background: 'none', border: 'none', borderBottom: `1px solid ${dim}`,
+    color, outline: 'none', width: '100%', padding: '0.5rem 0',
+    fontSize: '0.95rem', fontFamily: 'Inter, sans-serif',
+    caretColor: color,
+  };
+  const lbl: React.CSSProperties = {
+    color: dim, fontSize: '0.58rem', letterSpacing: '0.18em',
+    textTransform: 'uppercase', display: 'block', marginBottom: '0.4rem',
+    fontFamily: 'Inter, sans-serif', fontWeight: 500,
+  };
+  return (
+    <form onSubmit={e => e.preventDefault()}
+      style={{ width: '100%', maxWidth: '360px', display: 'flex', flexDirection: 'column', gap: '2.5rem', padding: '0 2.5rem' }}
+    >
+      <div><label style={lbl}>Email</label><input style={field} type="email" /></div>
+      <div>
+        <label style={lbl}>Message</label>
+        <textarea style={{ ...field, resize: 'none', height: '4.5rem', display: 'block' }} />
+      </div>
+      <button type="submit" style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, lineHeight: 0 }}>
+        <svg width="44" height="44" viewBox="0 0 44 44" style={{ display: 'block' }}>
+          <g transform="translate(22,22)">
+            {/* shaft */}
+            <line x1="-22" y1="0" x2="0" y2="0" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
+            {/* upper arm */}
+            <line x1="0" y1="0" x2="0" y2="-13"
+              stroke={color} strokeWidth="1.5" strokeLinecap="round"
+              style={{ transformOrigin: '0px 0px', transform: 'rotate(-36deg)' }}
+            />
+            {/* lower arm */}
+            <line x1="0" y1="0" x2="0" y2="13"
+              stroke={color} strokeWidth="1.5" strokeLinecap="round"
+              style={{ transformOrigin: '0px 0px', transform: 'rotate(36deg)' }}
+            />
+          </g>
+        </svg>
+      </button>
+    </form>
+  );
+};
 
-const Btn = ({ onClick, top, left, isPlus, color, label }: {
+// Each arm pivots from the chevron's center.
+// Upper arm: line pointing straight up, rotated ±ang → tip sweeps through 12 o'clock on every flip.
+// Lower arm: line pointing straight down, rotated ∓ang → tip sweeps through 6 o'clock.
+// The transition between > and < passes through a straight vertical | automatically.
+const Chevron = ({ pointsRight, color }: { pointsRight: boolean; color: string }) => {
+  const ang = pointsRight ? 36 : -36;
+  const ease = 'cubic-bezier(0.34, 1.2, 0.64, 1)';
+  return (
+    <svg width="44" height="44" viewBox="0 0 44 44" style={{ display: 'block' }}>
+      <g transform="translate(22,22)">
+        <line x1="0" y1="0" x2="0" y2="-17"
+          stroke={color} strokeWidth="1.5" strokeLinecap="round"
+          style={{
+            transformOrigin: '0px 0px',
+            transform: `rotate(${ang}deg)`,
+            transition: `transform 0.75s ${ease}, stroke 0.3s ease`,
+          }}
+        />
+        <line x1="0" y1="0" x2="0" y2="17"
+          stroke={color} strokeWidth="1.5" strokeLinecap="round"
+          style={{
+            transformOrigin: '0px 0px',
+            transform: `rotate(${-ang}deg)`,
+            transition: `transform 0.75s ${ease} 0.05s, stroke 0.3s ease`,
+          }}
+        />
+      </g>
+    </svg>
+  );
+};
+
+const Btn = ({ onClick, top, left, pointsRight, color, label }: {
   onClick: () => void; top: string; left: string;
-  isPlus: boolean; color: string; label: string;
+  pointsRight: boolean; color: string; label: string;
 }) => (
   <button onClick={onClick} aria-label={label}
-    style={{ position: 'absolute', top, left, transform: 'translateX(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, lineHeight: 0 }}
+    style={{ position: 'absolute', top, left, transform: 'translateX(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, lineHeight: 0, zIndex: 10 }}
   >
-    <Icon isPlus={isPlus} color={color} />
+    <Chevron pointsRight={pointsRight} color={color} />
   </button>
-);
-
-const Links = ({ show, color, delay }: { show: boolean; color: string; delay: string }) => (
-  <div style={{
-    display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '3rem',
-    opacity: show ? 1 : 0, pointerEvents: show ? 'all' : 'none',
-    transition: `opacity 0.5s ease ${show ? delay : '0s'}`,
-  }}>
-    <a href="mailto:bluer.mullion.0h@icloud.com" style={{ color, textDecoration: 'none', fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 700 }}>Email</a>
-    <a href="https://github.com/andreacarpini" target="_blank" rel="noopener noreferrer" style={{ color, textDecoration: 'none', fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 700 }}>GitHub</a>
-  </div>
 );
 
 const App = () => {
   const [state, setState] = React.useState<State>('default');
+  const isBlack = state === 'black';
 
   const whitePanelClip =
     state === 'white'  ? 'inset(0 0 0 0%)'   :
     state === 'black'  ? 'inset(0 0 0 100%)' :
                          'inset(0 0 0 50%)';
 
-  // white text layer — visible over black regions
   const whiteTextClip =
     state === 'black'  ? 'inset(0 0 0 0)'    :
     state === 'white'  ? 'inset(0 100% 0 0)' :
                          'inset(0 50% 0 0)';
 
-  // black text layer — visible over white regions
   const blackTextClip =
     state === 'white'  ? 'inset(0 0 0 0%)'   :
     state === 'black'  ? 'inset(0 0 0 100%)' :
@@ -85,35 +129,39 @@ const App = () => {
       <div style={{ position: 'fixed', inset: 0, background: '#fff', clipPath: whitePanelClip, transition: T }} />
 
       {/* White text layer (over black) */}
-      <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', clipPath: whiteTextClip, transition: T, zIndex: 1 }}>
+      <div style={{ position: 'fixed', inset: 0, clipPath: whiteTextClip, transition: T, zIndex: 1, overflow: 'hidden' }}>
+        {/* Name — always centered in full screen, fades out when form is open */}
+        <div style={{
+          position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          opacity: isBlack ? 0 : 1,
+          transition: 'opacity 0.9s cubic-bezier(0.76, 0, 0.24, 1)',
+          pointerEvents: isBlack ? 'none' : 'auto',
+        }}>
+          <NameHeading color="#fff" />
+        </div>
+
+        {/* Form — centered in full screen, fades in/out */}
+        <div style={{
+          position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          opacity: isBlack ? 1 : 0,
+          transform: isBlack ? 'translateY(0)' : 'translateY(22px)',
+          transition: 'opacity 0.8s cubic-bezier(0.76, 0, 0.24, 1), transform 0.8s cubic-bezier(0.76, 0, 0.24, 1)',
+          pointerEvents: isBlack ? 'auto' : 'none',
+        }}>
+          <ContactSlide color="#fff" />
+        </div>
+
         <Btn
           onClick={() => setState(s => s === 'black' ? 'default' : 'black')}
           top="20%" left="25%"
-          isPlus={state !== 'black'} color="#fff"
-          label={state === 'black' ? 'Close' : 'Open contact'}
+          pointsRight={isBlack} color="#fff"
+          label={isBlack ? 'Close' : 'Open'}
         />
-        <NameHeading color="#fff" />
       </div>
 
       {/* Black text layer (over white) */}
       <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', clipPath: blackTextClip, transition: T, zIndex: 1 }}>
-        <Btn
-          onClick={() => setState(s => s === 'white' ? 'default' : 'white')}
-          top="20%" left="75%"
-          isPlus={state === 'white'} color="#000"
-          label={state === 'white' ? 'Close' : 'Open contact'}
-        />
         <NameHeading color="#000" />
-      </div>
-
-      {/* Contact links — black side, appear at top:20% in right half */}
-      <div style={{ position: 'fixed', top: '20%', right: 0, width: '50%', display: 'flex', justifyContent: 'center', transform: 'translateY(-50%)', zIndex: 2 }}>
-        <Links show={state === 'black'} color="#fff" delay="0.75s" />
-      </div>
-
-      {/* Contact links — white side, appear at top:20% in left half */}
-      <div style={{ position: 'fixed', top: '20%', left: 0, width: '50%', display: 'flex', justifyContent: 'center', transform: 'translateY(-50%)', zIndex: 2 }}>
-        <Links show={state === 'white'} color="#000" delay="0.75s" />
       </div>
     </>
   );

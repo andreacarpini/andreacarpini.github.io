@@ -45,6 +45,11 @@
         to   { opacity: 1; transform: translateY(0);   }
       }
 
+      @keyframes formDrift {
+        from { opacity: 0; transform: translateY(22px); }
+        to   { opacity: 1; transform: translateY(0);    }
+      }
+
       /* ── Hero layout ────────────────────────────────────── */
       .hero-split {
         display: flex;
@@ -109,6 +114,9 @@
         object-position: center 20%;
         flex-shrink: 0;
       }
+
+      /* ── Hide scrollbar ──────────────────────────────────── */
+      .h-scroll::-webkit-scrollbar { display: none; }
 
       /* ── Mobile ─────────────────────────────────────────── */
       @media (max-width: 640px) {
