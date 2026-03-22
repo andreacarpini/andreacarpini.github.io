@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Andrew Karpensky</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='16' height='32' fill='%23000'/><rect x='16' width='16' height='32' fill='%23fff'/></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,11 +44,6 @@
       @keyframes fadeIn {
         from { opacity: 0; transform: translateY(8px); }
         to   { opacity: 1; transform: translateY(0);   }
-      }
-
-      @keyframes formDrift {
-        from { opacity: 0; transform: translateY(22px); }
-        to   { opacity: 1; transform: translateY(0);    }
       }
 
       /* ── Hero layout ────────────────────────────────────── */
@@ -125,6 +121,21 @@
           align-items: flex-start;
           gap: 2rem;
         }
+      }
+      .nav-link {
+        font-family: 'Playfair Display', serif;
+        font-weight: 400;
+        font-size: 1rem;
+        text-decoration: none;
+        text-underline-offset: 6px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+      }
+      .nav-link:hover,
+      .nav-link:active {
+        text-decoration: underline;
       }
     </style>
   <script type="importmap">

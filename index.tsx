@@ -2,167 +2,116 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 
-const T = `clip-path 0.9s cubic-bezier(0.76, 0, 0.24, 1)`;
-type State = 'default' | 'black' | 'white';
+const nameStyle = { padding: '2rem 2.5rem', margin: 0, whiteSpace: 'nowrap' as const };
 
-const NameHeading = ({ color }: { color: string }) => (
-  <h1
-    className="serif text-5xl md:text-7xl lg:text-8xl tracking-tighter leading-[1.05] fade-in"
-    style={{ color, padding: '2rem 2.5rem', margin: 0 }}
-  >
-    Andrew<br />
-    <span className="italic">Karpensky</span>
-  </h1>
-);
-
-const ContactSlide = ({ color }: { color: string }) => {
-  const dim = color === '#fff' ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.28)';
-  const field: React.CSSProperties = {
-    background: 'none', border: 'none', borderBottom: `1px solid ${dim}`,
-    color, outline: 'none', width: '100%', padding: '0.5rem 0',
-    fontSize: '0.95rem', fontFamily: 'Inter, sans-serif',
-    caretColor: color,
-  };
-  const lbl: React.CSSProperties = {
-    color: dim, fontSize: '0.58rem', letterSpacing: '0.18em',
-    textTransform: 'uppercase', display: 'block', marginBottom: '0.4rem',
-    fontFamily: 'Inter, sans-serif', fontWeight: 500,
-  };
-  return (
-    <form onSubmit={e => e.preventDefault()}
-      style={{ width: '100%', maxWidth: '360px', display: 'flex', flexDirection: 'column', gap: '2.5rem', padding: '0 2.5rem' }}
-    >
-      <div><label style={lbl}>Email</label><input style={field} type="email" /></div>
-      <div>
-        <label style={lbl}>Message</label>
-        <textarea style={{ ...field, resize: 'none', height: '4.5rem', display: 'block' }} />
-      </div>
-      <button type="submit" style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, lineHeight: 0 }}>
-        <svg width="44" height="44" viewBox="0 0 44 44" style={{ display: 'block' }}>
-          <g transform="translate(22,22)">
-            {/* shaft */}
-            <line x1="-22" y1="0" x2="0" y2="0" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
-            {/* upper arm */}
-            <line x1="0" y1="0" x2="0" y2="-13"
-              stroke={color} strokeWidth="1.5" strokeLinecap="round"
-              style={{ transformOrigin: '0px 0px', transform: 'rotate(-36deg)' }}
-            />
-            {/* lower arm */}
-            <line x1="0" y1="0" x2="0" y2="13"
-              stroke={color} strokeWidth="1.5" strokeLinecap="round"
-              style={{ transformOrigin: '0px 0px', transform: 'rotate(36deg)' }}
-            />
-          </g>
-        </svg>
-      </button>
-    </form>
-  );
+const linkStyle = {
+  fontFamily: "'Playfair Display', serif",
+  fontWeight: 400,
+  fontSize: '1rem',
 };
 
-// Each arm pivots from the chevron's center.
-// Upper arm: line pointing straight up, rotated ±ang → tip sweeps through 12 o'clock on every flip.
-// Lower arm: line pointing straight down, rotated ∓ang → tip sweeps through 6 o'clock.
-// The transition between > and < passes through a straight vertical | automatically.
-const Chevron = ({ pointsRight, color }: { pointsRight: boolean; color: string }) => {
-  const ang = pointsRight ? 36 : -36;
-  const ease = 'cubic-bezier(0.34, 1.2, 0.64, 1)';
-  return (
-    <svg width="44" height="44" viewBox="0 0 44 44" style={{ display: 'block' }}>
-      <g transform="translate(22,22)">
-        <line x1="0" y1="0" x2="0" y2="-17"
-          stroke={color} strokeWidth="1.5" strokeLinecap="round"
-          style={{
-            transformOrigin: '0px 0px',
-            transform: `rotate(${ang}deg)`,
-            transition: `transform 0.75s ${ease}, stroke 0.3s ease`,
-          }}
-        />
-        <line x1="0" y1="0" x2="0" y2="17"
-          stroke={color} strokeWidth="1.5" strokeLinecap="round"
-          style={{
-            transformOrigin: '0px 0px',
-            transform: `rotate(${-ang}deg)`,
-            transition: `transform 0.75s ${ease} 0.05s, stroke 0.3s ease`,
-          }}
-        />
-      </g>
-    </svg>
-  );
-};
+// Decided once per page load, never changes
+const flipped = Math.random() < 0.5;
 
-const Btn = ({ onClick, top, left, pointsRight, color, label }: {
-  onClick: () => void; top: string; left: string;
-  pointsRight: boolean; color: string; label: string;
-}) => (
-  <button onClick={onClick} aria-label={label}
-    style={{ position: 'absolute', top, left, transform: 'translateX(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, lineHeight: 0, zIndex: 10 }}
-  >
-    <Chevron pointsRight={pointsRight} color={color} />
-  </button>
-);
+// left/right background and text colors based on flip
+const leftBg  = flipped ? '#fff' : '#000';
+const rightBg = flipped ? '#000' : '#fff';
+const leftText  = flipped ? '#000' : '#fff';
+const rightText = flipped ? '#fff' : '#000';
 
 const App = () => {
-  const [state, setState] = React.useState<State>('default');
-  const isBlack = state === 'black';
+  const [linksOpen, setLinksOpen] = React.useState(false);
+  const [aboutOpen, setAboutOpen] = React.useState(false);
+  const btnRef = React.useRef<HTMLButtonElement>(null);
+  const linkRef = React.useRef<HTMLAnchorElement>(null);
+  const aboutBtnRef = React.useRef<HTMLButtonElement>(null);
+  const aboutPanelRef = React.useRef<HTMLDivElement>(null);
 
-  const whitePanelClip =
-    state === 'white'  ? 'inset(0 0 0 0%)'   :
-    state === 'black'  ? 'inset(0 0 0 100%)' :
-                         'inset(0 0 0 50%)';
+  React.useEffect(() => {
+    if (!linksOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (
+        btnRef.current?.contains(e.target as Node) ||
+        linkRef.current?.contains(e.target as Node)
+      ) return;
+      setLinksOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [linksOpen]);
 
-  const whiteTextClip =
-    state === 'black'  ? 'inset(0 0 0 0)'    :
-    state === 'white'  ? 'inset(0 100% 0 0)' :
-                         'inset(0 50% 0 0)';
-
-  const blackTextClip =
-    state === 'white'  ? 'inset(0 0 0 0%)'   :
-    state === 'black'  ? 'inset(0 0 0 100%)' :
-                         'inset(0 0 0 50%)';
+  React.useEffect(() => {
+    if (!aboutOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (
+        aboutBtnRef.current?.contains(e.target as Node) ||
+        aboutPanelRef.current?.contains(e.target as Node)
+      ) return;
+      setAboutOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [aboutOpen]);
 
   return (
     <>
-      {/* Black base */}
-      <div style={{ position: 'fixed', inset: 0, background: '#000' }} />
+      {/* Left half */}
+      <div style={{ position: 'fixed', inset: 0, right: '50%', background: leftBg }} />
+      {/* Right half */}
+      <div style={{ position: 'fixed', inset: 0, left: '50%', background: rightBg }} />
 
-      {/* White panel */}
-      <div style={{ position: 'fixed', inset: 0, background: '#fff', clipPath: whitePanelClip, transition: T }} />
-
-      {/* White text layer (over black) */}
-      <div style={{ position: 'fixed', inset: 0, clipPath: whiteTextClip, transition: T, zIndex: 1, overflow: 'hidden' }}>
-        {/* Name — always centered in full screen, fades out when form is open */}
-        <div style={{
-          position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
-          opacity: isBlack ? 0 : 1,
-          transition: 'opacity 0.9s cubic-bezier(0.76, 0, 0.24, 1)',
-          pointerEvents: isBlack ? 'none' : 'auto',
-        }}>
-          <NameHeading color="#fff" />
-        </div>
-
-        {/* Form — centered in full screen, fades in/out */}
-        <div style={{
-          position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
-          opacity: isBlack ? 1 : 0,
-          transform: isBlack ? 'translateY(0)' : 'translateY(22px)',
-          transition: 'opacity 0.8s cubic-bezier(0.76, 0, 0.24, 1), transform 0.8s cubic-bezier(0.76, 0, 0.24, 1)',
-          pointerEvents: isBlack ? 'auto' : 'none',
-        }}>
-          <ContactSlide color="#fff" />
-        </div>
-
-        <Btn
-          onClick={() => setState(s => s === 'black' ? 'default' : 'black')}
-          top="20%" left="25%"
-          pointsRight={isBlack} color="#fff"
-          label={isBlack ? 'Close' : 'Open'}
-        />
+      {/* Name — left half */}
+      <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1, clipPath: 'inset(0 50% 0 0)' }}>
+        <h1 className="serif text-5xl md:text-7xl lg:text-8xl tracking-tighter leading-[1.05]"
+          style={{ ...nameStyle, color: leftText, fontWeight: 400 }}>
+          Andrew<br /><span className="italic">Karpensky</span>
+        </h1>
+      </div>
+      {/* Name — right half */}
+      <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1, clipPath: 'inset(0 0 0 50%)' }}>
+        <h1 className="serif text-5xl md:text-7xl lg:text-8xl tracking-tighter leading-[1.05]"
+          style={{ ...nameStyle, color: rightText, fontWeight: 400 }}>
+          Andrew<br /><span className="italic">Karpensky</span>
+        </h1>
       </div>
 
-      {/* Black text layer (over white) */}
-      <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', clipPath: blackTextClip, transition: T, zIndex: 1 }}>
-        <NameHeading color="#000" />
-      </div>
+      {/* Contact — centered in left side */}
+      <a href="mailto:contact@andrewkarpensky.com" className="nav-link"
+        style={{ position: 'fixed', bottom: '20%', left: '25%', transform: 'translateX(-50%)', zIndex: 2, color: leftText }}>
+        Contact
+      </a>
+
+      {/* About toggle — top 20%, centered in left side */}
+      <button
+        ref={aboutBtnRef}
+        onClick={() => setAboutOpen(o => !o)}
+        className="nav-link"
+        style={{ position: 'fixed', top: '20%', left: '25%', transform: 'translateX(-50%)', zIndex: 2, color: leftText, fontStyle: 'italic', textDecoration: aboutOpen ? 'underline' : undefined, textUnderlineOffset: '6px' }}>
+        About
+      </button>
+      {aboutOpen && (
+        <div ref={aboutPanelRef} style={{ position: 'fixed', top: 'calc(20% + 2.5rem)', left: '25%', transform: 'translateX(-50%)', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.3rem' }}>
+          <span style={{ color: leftText, fontFamily: "'Playfair Display', serif", fontWeight: 400, fontSize: '0.9rem', fontStyle: 'italic', whiteSpace: 'nowrap' }}>Chicago, IL</span>
+          <span style={{ color: leftText, fontFamily: "'Playfair Display', serif", fontWeight: 400, fontSize: '0.9rem', fontStyle: 'italic', whiteSpace: 'nowrap' }}>Web Design</span>
+          <span style={{ color: leftText, fontFamily: "'Playfair Display', serif", fontWeight: 400, fontSize: '0.9rem', fontStyle: 'italic', whiteSpace: 'nowrap' }}>AWS, DevOps</span>
+        </div>
+      )}
+
+      {/* Links toggle — centered in right side */}
+      <button
+        ref={btnRef}
+        onClick={() => setLinksOpen(o => !o)}
+        className="nav-link"
+        style={{ position: 'fixed', bottom: '20%', left: '75%', transform: 'translateX(-50%)', zIndex: 2, color: rightText, fontStyle: 'italic', textDecoration: linksOpen ? 'underline' : undefined, textUnderlineOffset: '6px' }}>
+        Links
+      </button>
+      {linksOpen && (
+        <a ref={linkRef} href="https://github.com/andreacarpini" target="_blank" rel="noopener noreferrer"
+          className="nav-link"
+          style={{ position: 'fixed', bottom: 'calc(20% - 2.5rem)', left: '75%', transform: 'translateX(-50%)', zIndex: 2, color: rightText, fontStyle: 'italic' }}>
+          GitHub
+        </a>
+      )}
     </>
   );
 };
