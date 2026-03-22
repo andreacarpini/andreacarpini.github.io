@@ -98,6 +98,28 @@
       .github-link {
         bottom: calc(20% - 2.5rem);
       }
+      .skills-toggle {
+        position: fixed;
+        top: 20%;
+        left: 25%;
+        z-index: 2;
+        transform: translateX(-50%);
+      }
+      .skills-text {
+        position: fixed;
+        top: calc(20% + 2.5rem);
+        left: 25%;
+        z-index: 2;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        white-space: nowrap;
+      }
+      .skills-text p {
+        margin: 0;
+      }
       .is-hidden {
         display: none;
       }
@@ -117,6 +139,16 @@
       <h1 id="right-name" class="name-title">
         Andrew<br /><span class="name-accent">Karpensky</span>
       </h1>
+    </div>
+
+    <button id="skills-toggle" type="button" class="nav-link skills-toggle" aria-expanded="false" aria-controls="skills-text">
+      Skills
+    </button>
+    <div id="skills-text" class="skills-text is-hidden" aria-hidden="true">
+      <p>AWS, Terraform</p>
+      <p>Kubernetes</p>
+      <p>GitHub Actions</p>
+      <p>Web Applications</p>
     </div>
 
     <a id="contact-link" href="mailto:bluer.mullion.0h@icloud.com" class="nav-link contact-link">
@@ -145,6 +177,9 @@
       const contactLink = document.getElementById('contact-link');
       const linksToggle = document.getElementById('links-toggle');
       const githubLink = document.getElementById('github-link');
+      const skillsToggle = document.getElementById('skills-toggle');
+      const skillsText = document.getElementById('skills-text');
+      const skillItems = skillsText ? skillsText.querySelectorAll('p') : [];
       let activeTouchLink = null;
 
       leftPanel.style.background = leftBg;
@@ -154,6 +189,10 @@
       contactLink.style.color = leftText;
       linksToggle.style.color = rightText;
       githubLink.style.color = rightText;
+      skillsToggle.style.color = leftText;
+      skillItems.forEach(function (item) {
+        item.style.color = leftText;
+      });
 
       function closeLinks() {
         githubLink.classList.add('is-hidden');
@@ -165,6 +204,20 @@
         githubLink.classList.remove('is-hidden');
         linksToggle.classList.add('is-open');
         linksToggle.setAttribute('aria-expanded', 'true');
+      }
+
+      function closeSkills() {
+        skillsText.classList.add('is-hidden');
+        skillsText.setAttribute('aria-hidden', 'true');
+        skillsToggle.classList.remove('is-open');
+        skillsToggle.setAttribute('aria-expanded', 'false');
+      }
+
+      function openSkills() {
+        skillsText.classList.remove('is-hidden');
+        skillsText.setAttribute('aria-hidden', 'false');
+        skillsToggle.classList.add('is-open');
+        skillsToggle.setAttribute('aria-expanded', 'true');
       }
 
       function setTouchLink(nextLink) {
@@ -202,15 +255,27 @@
         openLinks();
       });
 
+      skillsToggle.addEventListener('click', function () {
+        const isOpen = !skillsText.classList.contains('is-hidden');
+        if (isOpen) {
+          closeSkills();
+          return;
+        }
+        openSkills();
+      });
+
       document.addEventListener('mousedown', function (event) {
         if (
           linksToggle.contains(event.target) ||
-          githubLink.contains(event.target)
+          githubLink.contains(event.target) ||
+          skillsToggle.contains(event.target) ||
+          skillsText.contains(event.target)
         ) {
           return;
         }
 
         closeLinks();
+        closeSkills();
       });
 
       document.addEventListener('touchstart', function (event) {
