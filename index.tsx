@@ -21,11 +21,8 @@ const rightText = flipped ? '#fff' : '#000';
 
 const App = () => {
   const [linksOpen, setLinksOpen] = React.useState(false);
-  const [aboutOpen, setAboutOpen] = React.useState(false);
   const btnRef = React.useRef<HTMLButtonElement>(null);
   const linkRef = React.useRef<HTMLAnchorElement>(null);
-  const aboutBtnRef = React.useRef<HTMLButtonElement>(null);
-  const aboutPanelRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     if (!linksOpen) return;
@@ -39,19 +36,6 @@ const App = () => {
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, [linksOpen]);
-
-  React.useEffect(() => {
-    if (!aboutOpen) return;
-    const handler = (e: MouseEvent) => {
-      if (
-        aboutBtnRef.current?.contains(e.target as Node) ||
-        aboutPanelRef.current?.contains(e.target as Node)
-      ) return;
-      setAboutOpen(false);
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, [aboutOpen]);
 
   return (
     <>
@@ -80,22 +64,6 @@ const App = () => {
         style={{ position: 'fixed', bottom: '20%', left: '25%', transform: 'translateX(-50%)', zIndex: 2, color: leftText }}>
         Contact
       </a>
-
-      {/* About toggle — top 20%, centered in left side */}
-      <button
-        ref={aboutBtnRef}
-        onClick={() => setAboutOpen(o => !o)}
-        className="nav-link"
-        style={{ position: 'fixed', top: '20%', left: '25%', transform: 'translateX(-50%)', zIndex: 2, color: leftText, fontStyle: 'italic', textDecoration: aboutOpen ? 'underline' : undefined, textUnderlineOffset: '6px' }}>
-        About
-      </button>
-      {aboutOpen && (
-        <div ref={aboutPanelRef} style={{ position: 'fixed', top: 'calc(20% + 2.5rem)', left: '25%', transform: 'translateX(-50%)', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.3rem' }}>
-          <span style={{ color: leftText, fontFamily: "'Playfair Display', serif", fontWeight: 400, fontSize: '0.9rem', fontStyle: 'italic', whiteSpace: 'nowrap' }}>Chicago, IL</span>
-          <span style={{ color: leftText, fontFamily: "'Playfair Display', serif", fontWeight: 400, fontSize: '0.9rem', fontStyle: 'italic', whiteSpace: 'nowrap' }}>Web Design</span>
-          <span style={{ color: leftText, fontFamily: "'Playfair Display', serif", fontWeight: 400, fontSize: '0.9rem', fontStyle: 'italic', whiteSpace: 'nowrap' }}>AWS, DevOps</span>
-        </div>
-      )}
 
       {/* Links toggle — centered in right side */}
       <button
