@@ -71,7 +71,9 @@
         padding: 0;
       }
       .nav-link:hover,
-      .nav-link:active {
+      .nav-link:active,
+      .nav-link.is-pressed,
+      .nav-link.is-open {
         text-decoration: underline;
       }
       button {
@@ -143,6 +145,7 @@
       const contactLink = document.getElementById('contact-link');
       const linksToggle = document.getElementById('links-toggle');
       const githubLink = document.getElementById('github-link');
+      let activeTouchLink = null;
 
       leftPanel.style.background = leftBg;
       rightPanel.style.background = rightBg;
@@ -154,14 +157,40 @@
 
       function closeLinks() {
         githubLink.classList.add('is-hidden');
-        linksToggle.style.textDecoration = 'none';
+        linksToggle.classList.remove('is-open');
         linksToggle.setAttribute('aria-expanded', 'false');
       }
 
       function openLinks() {
         githubLink.classList.remove('is-hidden');
-        linksToggle.style.textDecoration = 'underline';
+        linksToggle.classList.add('is-open');
         linksToggle.setAttribute('aria-expanded', 'true');
+      }
+
+      function setTouchLink(nextLink) {
+        if (activeTouchLink === nextLink) {
+          return;
+        }
+
+        if (activeTouchLink) {
+          activeTouchLink.classList.remove('is-pressed');
+        }
+
+        activeTouchLink = nextLink;
+
+        if (activeTouchLink) {
+          activeTouchLink.classList.add('is-pressed');
+        }
+      }
+
+      function updateTouchLink(touch) {
+        const hoveredElement = document.elementFromPoint(touch.clientX, touch.clientY);
+        const nextLink = hoveredElement ? hoveredElement.closest('.nav-link') : null;
+        setTouchLink(nextLink);
+      }
+
+      function clearTouchLink() {
+        setTouchLink(null);
       }
 
       linksToggle.addEventListener('click', function () {
@@ -183,6 +212,27 @@
 
         closeLinks();
       });
+
+      document.addEventListener('touchstart', function (event) {
+        if (event.touches.length !== 1) {
+          clearTouchLink();
+          return;
+        }
+
+        updateTouchLink(event.touches[0]);
+      }, { passive: true });
+
+      document.addEventListener('touchmove', function (event) {
+        if (event.touches.length !== 1) {
+          clearTouchLink();
+          return;
+        }
+
+        updateTouchLink(event.touches[0]);
+      }, { passive: true });
+
+      document.addEventListener('touchend', clearTouchLink, { passive: true });
+      document.addEventListener('touchcancel', clearTouchLink, { passive: true });
     </script>
   </body>
 </html>
