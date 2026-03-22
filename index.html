@@ -13,7 +13,6 @@
       html, body {
         overflow: hidden;
         height: 100%;
-        position: fixed;
         width: 100%;
       }
       body {
@@ -23,11 +22,39 @@
         color: #1A1A1A;
         -webkit-font-smoothing: antialiased;
       }
+      .panel {
+        position: fixed;
+        inset: 0;
+      }
+      .panel-left {
+        right: 50%;
+      }
+      .panel-right {
+        left: 50%;
+      }
+      .name-wrap {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1;
+      }
+      .name-wrap-left {
+        clip-path: inset(0 50% 0 0);
+      }
+      .name-wrap-right {
+        clip-path: inset(0 0 0 50%);
+      }
       .name-title {
         font-family: 'Playfair Display', serif;
         font-size: clamp(3rem, 8vw, 6rem);
         letter-spacing: -0.05em;
         line-height: 1.05;
+        margin: 0;
+        padding: 2rem 2.5rem;
+        white-space: nowrap;
+        font-weight: 400;
       }
       .name-accent {
         font-style: italic;
@@ -50,10 +77,112 @@
       button {
         font: inherit;
       }
+      .contact-link,
+      .links-toggle,
+      .github-link {
+        position: fixed;
+        bottom: 20%;
+        z-index: 2;
+        transform: translateX(-50%);
+      }
+      .contact-link {
+        left: 25%;
+      }
+      .links-toggle,
+      .github-link {
+        left: 75%;
+        font-style: italic;
+      }
+      .github-link {
+        bottom: calc(20% - 2.5rem);
+      }
+      .is-hidden {
+        display: none;
+      }
     </style>
 </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
+    <div id="left-panel" class="panel panel-left" aria-hidden="true"></div>
+    <div id="right-panel" class="panel panel-right" aria-hidden="true"></div>
+
+    <div class="name-wrap name-wrap-left" aria-hidden="true">
+      <h1 id="left-name" class="name-title">
+        Andrew<br /><span class="name-accent">Karpensky</span>
+      </h1>
+    </div>
+
+    <div class="name-wrap name-wrap-right" aria-hidden="true">
+      <h1 id="right-name" class="name-title">
+        Andrew<br /><span class="name-accent">Karpensky</span>
+      </h1>
+    </div>
+
+    <a id="contact-link" href="mailto:bluer.mullion.0h@icloud.com" class="nav-link contact-link">
+      Contact
+    </a>
+
+    <button id="links-toggle" type="button" class="nav-link links-toggle" aria-expanded="false" aria-controls="github-link">
+      Links
+    </button>
+
+    <a id="github-link" href="https://github.com/andreacarpini" target="_blank" rel="noopener noreferrer" class="nav-link github-link is-hidden">
+      GitHub
+    </a>
+
+    <script>
+      const flipped = Math.random() < 0.5;
+      const leftBg = flipped ? '#fff' : '#000';
+      const rightBg = flipped ? '#000' : '#fff';
+      const leftText = flipped ? '#000' : '#fff';
+      const rightText = flipped ? '#fff' : '#000';
+
+      const leftPanel = document.getElementById('left-panel');
+      const rightPanel = document.getElementById('right-panel');
+      const leftName = document.getElementById('left-name');
+      const rightName = document.getElementById('right-name');
+      const contactLink = document.getElementById('contact-link');
+      const linksToggle = document.getElementById('links-toggle');
+      const githubLink = document.getElementById('github-link');
+
+      leftPanel.style.background = leftBg;
+      rightPanel.style.background = rightBg;
+      leftName.style.color = leftText;
+      rightName.style.color = rightText;
+      contactLink.style.color = leftText;
+      linksToggle.style.color = rightText;
+      githubLink.style.color = rightText;
+
+      function closeLinks() {
+        githubLink.classList.add('is-hidden');
+        linksToggle.style.textDecoration = 'none';
+        linksToggle.setAttribute('aria-expanded', 'false');
+      }
+
+      function openLinks() {
+        githubLink.classList.remove('is-hidden');
+        linksToggle.style.textDecoration = 'underline';
+        linksToggle.setAttribute('aria-expanded', 'true');
+      }
+
+      linksToggle.addEventListener('click', function () {
+        const isOpen = !githubLink.classList.contains('is-hidden');
+        if (isOpen) {
+          closeLinks();
+          return;
+        }
+        openLinks();
+      });
+
+      document.addEventListener('mousedown', function (event) {
+        if (
+          linksToggle.contains(event.target) ||
+          githubLink.contains(event.target)
+        ) {
+          return;
+        }
+
+        closeLinks();
+      });
+    </script>
   </body>
 </html>
