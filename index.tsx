@@ -54,7 +54,7 @@ const App = () => {
       </div>
 
       {/* Contact — centered in left side */}
-      <a href="mailto:contact@andrewkarpensky.com" className="nav-link"
+      <a href="mailto:bluer.mullion.0h@icloud.com" className="nav-link"
         style={{ position: 'fixed', bottom: '20%', left: '25%', transform: 'translateX(-50%)', zIndex: 2, color: leftText }}>
         Contact
       </a>
