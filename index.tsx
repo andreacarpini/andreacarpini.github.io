@@ -4,12 +4,6 @@ import { createRoot } from 'react-dom/client';
 
 const nameStyle = { padding: '2rem 2.5rem', margin: 0, whiteSpace: 'nowrap' as const };
 
-const linkStyle = {
-  fontFamily: "'Playfair Display', serif",
-  fontWeight: 400,
-  fontSize: '1rem',
-};
-
 // Decided once per page load, never changes
 const flipped = Math.random() < 0.5;
 
