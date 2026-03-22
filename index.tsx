@@ -1,5 +1,5 @@
 
-import React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
 const nameStyle = { padding: '2rem 2.5rem', margin: 0, whiteSpace: 'nowrap' as const };
@@ -14,11 +14,11 @@ const leftText  = flipped ? '#000' : '#fff';
 const rightText = flipped ? '#fff' : '#000';
 
 const App = () => {
-  const [linksOpen, setLinksOpen] = React.useState(false);
-  const btnRef = React.useRef<HTMLButtonElement>(null);
-  const linkRef = React.useRef<HTMLAnchorElement>(null);
+  const [linksOpen, setLinksOpen] = useState(false);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const linkRef = useRef<HTMLAnchorElement>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!linksOpen) return;
     const handler = (e: MouseEvent) => {
       if (
@@ -33,38 +33,32 @@ const App = () => {
 
   return (
     <>
-      {/* Left half */}
       <div style={{ position: 'fixed', inset: 0, right: '50%', background: leftBg }} />
-      {/* Right half */}
       <div style={{ position: 'fixed', inset: 0, left: '50%', background: rightBg }} />
 
-      {/* Name — left half */}
       <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1, clipPath: 'inset(0 50% 0 0)' }}>
-        <h1 className="serif text-5xl md:text-7xl lg:text-8xl tracking-tighter leading-[1.05]"
+        <h1 className="name-title"
           style={{ ...nameStyle, color: leftText, fontWeight: 400 }}>
-          Andrew<br /><span className="italic">Karpensky</span>
+          Andrew<br /><span className="name-accent">Karpensky</span>
         </h1>
       </div>
-      {/* Name — right half */}
       <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1, clipPath: 'inset(0 0 0 50%)' }}>
-        <h1 className="serif text-5xl md:text-7xl lg:text-8xl tracking-tighter leading-[1.05]"
+        <h1 className="name-title"
           style={{ ...nameStyle, color: rightText, fontWeight: 400 }}>
-          Andrew<br /><span className="italic">Karpensky</span>
+          Andrew<br /><span className="name-accent">Karpensky</span>
         </h1>
       </div>
 
-      {/* Contact — centered in left side */}
       <a href="mailto:bluer.mullion.0h@icloud.com" className="nav-link"
         style={{ position: 'fixed', bottom: '20%', left: '25%', transform: 'translateX(-50%)', zIndex: 2, color: leftText }}>
         Contact
       </a>
 
-      {/* Links toggle — centered in right side */}
       <button
         ref={btnRef}
         onClick={() => setLinksOpen(o => !o)}
         className="nav-link"
-        style={{ position: 'fixed', bottom: '20%', left: '75%', transform: 'translateX(-50%)', zIndex: 2, color: rightText, fontStyle: 'italic', textDecoration: linksOpen ? 'underline' : undefined, textUnderlineOffset: '6px' }}>
+        style={{ position: 'fixed', bottom: '20%', left: '75%', transform: 'translateX(-50%)', zIndex: 2, color: rightText, fontStyle: 'italic', textDecoration: linksOpen ? 'underline' : undefined }}>
         Links
       </button>
       {linksOpen && (

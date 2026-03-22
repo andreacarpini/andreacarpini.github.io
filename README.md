@@ -1,2 +1,2 @@
 
-# Andrew Karpensky Portfolio
+# Andrew Karpensky

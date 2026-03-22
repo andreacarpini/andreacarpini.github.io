@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Andrew Karpensky</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='16' height='32' fill='%23000'/><rect x='16' width='16' height='32' fill='%23fff'/></svg>">
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
@@ -18,12 +17,21 @@
         width: 100%;
       }
       body {
+        margin: 0;
         font-family: 'Playfair Display', serif;
         background-color: #000;
         color: #1A1A1A;
         -webkit-font-smoothing: antialiased;
       }
-      .serif { font-family: 'Playfair Display', serif; }
+      .name-title {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(3rem, 8vw, 6rem);
+        letter-spacing: -0.05em;
+        line-height: 1.05;
+      }
+      .name-accent {
+        font-style: italic;
+      }
       .nav-link {
         font-family: 'Playfair Display', serif;
         font-weight: 400;
@@ -39,16 +47,10 @@
       .nav-link:active {
         text-decoration: underline;
       }
+      button {
+        font: inherit;
+      }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@^19.2.3",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
-  }
-}
-</script>
 </head>
   <body>
     <div id="root"></div>
