@@ -650,8 +650,7 @@
       }, { passive: true });
 
       document.addEventListener('touchend', function () {
-        // delay clear so the underline stays visible during the tap action
-        setTimeout(clearTouchLink, 300);
+        // keep is-pressed until next touchstart, mirrors iOS sticky hover
       }, { passive: true });
       document.addEventListener('touchcancel', clearTouchLink, { passive: true });
     </script>
