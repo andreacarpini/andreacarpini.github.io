@@ -649,7 +649,10 @@
         updateTouchLink(event.touches[0]);
       }, { passive: true });
 
-      document.addEventListener('touchend', clearTouchLink, { passive: true });
+      document.addEventListener('touchend', function () {
+        // delay clear so the underline stays visible during the tap action
+        setTimeout(clearTouchLink, 300);
+      }, { passive: true });
       document.addEventListener('touchcancel', clearTouchLink, { passive: true });
     </script>
   </body>
