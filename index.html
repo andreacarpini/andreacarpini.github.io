@@ -75,6 +75,11 @@
           text-decoration: underline;
         }
       }
+      .nav-link.is-open,
+      .nav-link.is-pressed,
+      .nav-link.is-active {
+        text-decoration: underline;
+      }
       button {
         font: inherit;
       }
@@ -92,7 +97,6 @@
       .links-toggle,
       .github-link {
         left: 75%;
-        font-style: italic;
       }
       .github-link {
         bottom: calc(20% - 2.5rem);
@@ -110,7 +114,6 @@
         left: 75%;
         z-index: 2;
         transform: translateX(-50%);
-        font-style: italic;
       }
       .skills-text {
         position: absolute;
@@ -499,7 +502,7 @@
         blogList.appendChild(btn);
       });
 
-      openPost(0, true);
+      if (window.innerWidth > 768) { openPost(0, true); }
 
       function closeLinks() {
         githubLink.classList.add('is-hidden');
@@ -586,7 +589,12 @@
       });
 
       blogBackLabel.addEventListener('click', function () {
-        openPost(0, true);
+        blogList.querySelectorAll('.blog-post-item').forEach(function(btn) {
+          btn.classList.remove('is-active');
+        });
+        blogPanels.classList.remove('showing-post');
+        blogContent.innerHTML = '';
+        blogBcTitle.textContent = '';
         blogListPanel.scrollTop = 0;
       });
 
