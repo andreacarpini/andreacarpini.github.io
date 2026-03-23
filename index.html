@@ -23,7 +23,7 @@
         -webkit-font-smoothing: antialiased;
       }
       .panel {
-        position: fixed;
+        position: absolute;
         inset: 0;
       }
       .panel-left {
@@ -33,7 +33,7 @@
         left: 50%;
       }
       .name-wrap {
-        position: fixed;
+        position: absolute;
         inset: 0;
         display: flex;
         align-items: center;
@@ -70,10 +70,7 @@
         cursor: pointer;
         padding: 0;
       }
-      .nav-link:hover,
-      .nav-link:active,
-      .nav-link.is-pressed,
-      .nav-link.is-open {
+      .nav-link:hover {
         text-decoration: underline;
       }
       button {
@@ -82,7 +79,7 @@
       .contact-link,
       .links-toggle,
       .github-link {
-        position: fixed;
+        position: absolute;
         bottom: 20%;
         z-index: 2;
         transform: translateX(-50%);
@@ -99,14 +96,22 @@
         bottom: calc(20% - 2.5rem);
       }
       .skills-toggle {
-        position: fixed;
+        position: absolute;
         top: 20%;
         left: 25%;
         z-index: 2;
         transform: translateX(-50%);
       }
+      .latest-link {
+        position: absolute;
+        top: 20%;
+        left: 75%;
+        z-index: 2;
+        transform: translateX(-50%);
+        font-style: italic;
+      }
       .skills-text {
-        position: fixed;
+        position: absolute;
         top: calc(20% + 2.5rem);
         left: 25%;
         z-index: 2;
@@ -123,9 +128,185 @@
       .is-hidden {
         display: none;
       }
+      #main-screen {
+        position: fixed;
+        inset: 0;
+        transition: transform 0.7s cubic-bezier(0.77, 0, 0.175, 1);
+      }
+      #blog-screen {
+        position: fixed;
+        inset: 0;
+        transform: translateX(100%);
+        transition: transform 0.7s cubic-bezier(0.77, 0, 0.175, 1);
+        overflow: hidden;
+      }
+      #blog-panels {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        font-family: 'Playfair Display', serif;
+        transition: transform 0.7s cubic-bezier(0.77, 0, 0.175, 1);
+      }
+      #blog-list-panel {
+        width: 50%;
+        flex-shrink: 0;
+        overflow-y: auto;
+        padding: 6rem 3rem 3rem;
+        box-sizing: border-box;
+        position: relative;
+      }
+      #blog-content-panel {
+        width: 50%;
+        flex-shrink: 0;
+        overflow-y: auto;
+        padding: 6rem 3rem 3rem;
+        box-sizing: border-box;
+        position: relative;
+      }
+      .blog-back {
+        position: absolute;
+        top: 3rem;
+        left: 3rem;
+        z-index: 2;
+      }
+      .blog-post-item {
+        display: block;
+        text-align: left;
+        margin-bottom: 2.5rem;
+        max-width: 380px;
+        color: inherit;
+      }
+      .blog-post-item-title {
+        display: block;
+        font-size: 1.1rem;
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        margin-bottom: 0.4rem;
+      }
+      .blog-post-item.nav-link:hover,
+      .blog-post-item.nav-link:active,
+      .blog-post-item.nav-link.is-active {
+        text-decoration: none;
+      }
+      .blog-post-item:hover .blog-post-item-title,
+      .blog-post-item.is-active .blog-post-item-title {
+        text-decoration: underline;
+        text-underline-offset: 6px;
+      }
+      .blog-post-item-excerpt {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        font-size: 0.875rem;
+        line-height: 1.65;
+        opacity: 0.65;
+      }
+      .blog-content-title {
+        font-size: clamp(1.25rem, 3vw, 2rem);
+        font-weight: 400;
+        letter-spacing: -0.04em;
+        margin: 0 0 0.4rem;
+      }
+      .blog-content-date {
+        font-size: 0.75rem;
+        letter-spacing: 0.04em;
+        opacity: 0.45;
+        margin: 0 0 1.5rem;
+      }
+      .blog-content-body {
+        font-size: 0.9rem;
+        line-height: 1.8;
+        max-width: 480px;
+        opacity: 0.8;
+      }
+      .blog-content-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 1.5rem 0;
+      }
+      .blog-content-body a {
+        color: inherit;
+        text-underline-offset: 4px;
+      }
+      .blog-content-body h2 {
+        font-size: 1.25rem;
+        font-weight: 400;
+        letter-spacing: -0.03em;
+        margin: 2rem 0 0.5rem;
+      }
+      .blog-content-body h3 {
+        font-size: 1rem;
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        margin: 1.5rem 0 0.4rem;
+      }
+      .blog-content-body code {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 0.82em;
+        opacity: 0.75;
+        background: rgba(128,128,128,0.12);
+        padding: 0.1em 0.35em;
+        border-radius: 3px;
+      }
+      .blog-content-body blockquote {
+        margin: 1.25rem 0;
+        padding-left: 1.1rem;
+        border-left: 2px solid currentColor;
+        opacity: 0.6;
+        font-style: italic;
+      }
+      .blog-content-body hr {
+        border: none;
+        border-top: 1px solid currentColor;
+        opacity: 0.15;
+        margin: 2rem 0;
+      }
+      #blog-content-back {
+        position: absolute;
+        top: 3rem;
+        left: 3rem;
+        z-index: 2;
+        display: none;
+        align-items: center;
+        gap: 0;
+        font-family: 'Playfair Display', serif;
+        font-size: 1rem;
+        max-width: calc(100% - 6rem);
+      }
+      #blog-bc-title {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 0;
+      }
+      #blog-content-back .bc-sep,
+      .blog-back .bc-sep {
+        margin: 0 0.6em;
+      }
+      @media (max-width: 768px) {
+        #blog-panels {
+          width: 200%;
+        }
+        #blog-panels.showing-post {
+          transform: translateX(-50%);
+        }
+        #blog-list-panel,
+        #blog-content-panel {
+          width: 50%;
+        }
+        #blog-content-back {
+          display: flex;
+        }
+        .blog-post-item.is-active:not(:hover) .blog-post-item-title {
+          text-decoration: none;
+        }
+      }
     </style>
 </head>
   <body>
+    <div id="main-screen">
     <div id="left-panel" class="panel panel-left" aria-hidden="true"></div>
     <div id="right-panel" class="panel panel-right" aria-hidden="true"></div>
 
@@ -155,6 +336,10 @@
       Contact
     </a>
 
+    <button id="latest-link" type="button" class="nav-link latest-link">
+      Latest
+    </button>
+
     <button id="links-toggle" type="button" class="nav-link links-toggle" aria-expanded="false" aria-controls="github-link">
       Links
     </button>
@@ -163,6 +348,26 @@
       GitHub
     </a>
 
+    </div>
+
+    <div id="blog-screen">
+      <div id="blog-panels">
+      <div id="blog-list-panel">
+        <div class="blog-back">
+          <button id="blog-back-btn" type="button" class="nav-link">Main</button><span class="bc-sep">·</span><button id="blog-latest-label" type="button" class="nav-link">Latest</button>
+        </div>
+        <nav id="blog-list" aria-label="Blog posts"></nav>
+      </div>
+      <div id="blog-content-panel">
+        <div id="blog-content-back" aria-label="Breadcrumb navigation">
+          <button id="blog-bc-main" type="button" class="nav-link">Main</button><span class="bc-sep">·</span><button id="blog-bc-latest" type="button" class="nav-link">Latest</button><span class="bc-sep">·</span><span id="blog-bc-title"></span>
+        </div>
+        <div id="blog-content"></div>
+      </div>
+      </div>
+      </div>
+
+    <script src="posts.js"></script>
     <script>
       const flipped = Math.random() < 0.5;
       const leftBg = flipped ? '#fff' : '#000';
@@ -177,9 +382,23 @@
       const contactLink = document.getElementById('contact-link');
       const linksToggle = document.getElementById('links-toggle');
       const githubLink = document.getElementById('github-link');
+      const latestLink = document.getElementById('latest-link');
       const skillsToggle = document.getElementById('skills-toggle');
       const skillsText = document.getElementById('skills-text');
       const skillItems = skillsText ? skillsText.querySelectorAll('p') : [];
+      const mainScreen = document.getElementById('main-screen');
+      const blogScreen = document.getElementById('blog-screen');
+      const blogBack = document.getElementById('blog-back-btn');
+      const blogBackLabel = document.getElementById('blog-latest-label');
+      const blogPanels = document.getElementById('blog-panels');
+      const blogContentBack = document.getElementById('blog-content-back');
+      const blogBcMain = document.getElementById('blog-bc-main');
+      const blogBcLatest = document.getElementById('blog-bc-latest');
+      const blogBcTitle = document.getElementById('blog-bc-title');
+      const blogListPanel = document.getElementById('blog-list-panel');
+      const blogContentPanel = document.getElementById('blog-content-panel');
+      const blogList = document.getElementById('blog-list');
+      const blogContent = document.getElementById('blog-content');
       let activeTouchLink = null;
 
       leftPanel.style.background = leftBg;
@@ -189,10 +408,97 @@
       contactLink.style.color = leftText;
       linksToggle.style.color = rightText;
       githubLink.style.color = rightText;
+      latestLink.style.color = rightText;
       skillsToggle.style.color = leftText;
       skillItems.forEach(function (item) {
         item.style.color = leftText;
       });
+
+      blogListPanel.style.background = leftBg;
+      blogListPanel.style.color = leftText;
+      blogBack.style.color = leftText;
+      blogBackLabel.style.color = leftText;
+      blogBcMain.style.color = rightText;
+      blogBcLatest.style.color = rightText;
+      blogBcTitle.style.color = rightText;
+      blogContentPanel.style.background = rightBg;
+      blogContentPanel.style.color = rightText;
+
+      function parseMarkdown(text) {
+        var escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        // block-level: process line by line first, then group into paragraphs
+        var lines = escaped.trim().split('\n');
+        var blocks = [];
+        var paraLines = [];
+        function flushPara() {
+          if (paraLines.length) {
+            var content = paraLines.join(' ')
+              .replace(/!\[([^\]]*?)\]\(([^)]+?)\)/g, '<img src="$2" alt="$1">')
+              .replace(/\[([^\]]+?)\]\(([^)]+?)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+              .replace(/`([^`]+?)`/g, '<code>$1</code>')
+              .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+              .replace(/\*(.+?)\*/g, '<em>$1</em>');
+            blocks.push('<p>' + content + '</p>');
+            paraLines = [];
+          }
+        }
+        lines.forEach(function(line) {
+          var m;
+          if (/^\s*$/.test(line)) {
+            flushPara();
+          } else if ((m = line.match(/^##\s+(.+)/))) {
+            flushPara(); blocks.push('<h2>' + m[1] + '</h2>');
+          } else if ((m = line.match(/^###\s+(.+)/))) {
+            flushPara(); blocks.push('<h3>' + m[1] + '</h3>');
+          } else if ((m = line.match(/^>\s?(.*)/))) {
+            flushPara(); blocks.push('<blockquote>' + m[1] + '</blockquote>');
+          } else if (/^---+$/.test(line.trim())) {
+            flushPara(); blocks.push('<hr>');
+          } else {
+            paraLines.push(line.trim());
+          }
+        });
+        flushPara();
+        return blocks.join('');
+      }
+
+      function getExcerpt(text) {
+        return text
+          .replace(/!\[[^\]]*\]\([^)]+\)/g, '')
+          .replace(/\[[^\]]+\]\([^)]+\)/g, function(m) { return m.match(/\[([^\]]+)\]/)[1]; })
+          .replace(/#{1,3}\s+/g, '')
+          .replace(/^>\s?/gm, '')
+          .replace(/`([^`]+)`/g, '$1')
+          .replace(/\*\*/g, '').replace(/\*/g, '')
+          .replace(/^---+$/gm, '')
+          .replace(/\s+/g, ' ').trim();
+      }
+
+      function openPost(index, silent) {
+        var post = posts[index];
+        blogList.querySelectorAll('.blog-post-item').forEach(function(btn, i) {
+          btn.classList.toggle('is-active', i === index);
+        });
+        blogContent.innerHTML = '<h2 class="blog-content-title">' + post.title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</h2><p class="blog-content-date">' + post.date.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</p><div class="blog-content-body">' + parseMarkdown(post.body) + '</div>';
+        blogBcTitle.textContent = post.title;
+        if (!silent && window.innerWidth <= 768) {
+          blogPanels.classList.add('showing-post');
+          blogContentPanel.scrollTop = 0;
+        }
+      }
+
+      posts.forEach(function(post, i) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'nav-link blog-post-item';
+        var safeTitle = post.title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        var excerpt = getExcerpt(post.body);
+        btn.innerHTML = '<span class="blog-post-item-title">' + safeTitle + '</span><span class="blog-post-item-excerpt">' + excerpt + '</span>';
+        btn.addEventListener('click', function() { openPost(i); });
+        blogList.appendChild(btn);
+      });
+
+      openPost(0, true);
 
       function closeLinks() {
         githubLink.classList.add('is-hidden');
@@ -262,6 +568,44 @@
           return;
         }
         openSkills();
+      });
+
+      latestLink.addEventListener('click', function () {
+        closeLinks();
+        closeSkills();
+        mainScreen.style.transform = 'translateX(-100%)';
+        blogScreen.style.transform = 'translateX(0)';
+        blogBackLabel.classList.add('is-active');
+      });
+
+      blogBack.addEventListener('click', function () {
+        mainScreen.style.transform = '';
+        blogScreen.style.transform = '';
+        blogBackLabel.classList.remove('is-active');
+      });
+
+      blogBackLabel.addEventListener('click', function () {
+        openPost(0, true);
+        blogListPanel.scrollTop = 0;
+      });
+
+      blogContentBack.addEventListener('click', function () {
+        blogPanels.classList.remove('showing-post');
+      });
+
+      blogBcMain.addEventListener('click', function (event) {
+        event.stopPropagation();
+        mainScreen.style.transform = '';
+        blogScreen.style.transform = '';
+        blogScreen.addEventListener('transitionend', function handler() {
+          blogPanels.classList.remove('showing-post');
+          blogScreen.removeEventListener('transitionend', handler);
+        });
+      });
+
+      blogBcLatest.addEventListener('click', function (event) {
+        event.stopPropagation();
+        blogPanels.classList.remove('showing-post');
       });
 
       document.addEventListener('mousedown', function (event) {
