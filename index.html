@@ -70,8 +70,10 @@
         cursor: pointer;
         padding: 0;
       }
-      .nav-link:hover {
-        text-decoration: underline;
+      @media (hover: hover) {
+        .nav-link:hover {
+          text-decoration: underline;
+        }
       }
       button {
         font: inherit;
@@ -188,10 +190,12 @@
       .blog-post-item.nav-link.is-active {
         text-decoration: none;
       }
-      .blog-post-item:hover .blog-post-item-title,
-      .blog-post-item.is-active .blog-post-item-title {
-        text-decoration: underline;
-        text-underline-offset: 6px;
+      @media (hover: hover) {
+        .blog-post-item:hover .blog-post-item-title,
+        .blog-post-item.is-active .blog-post-item-title {
+          text-decoration: underline;
+          text-underline-offset: 6px;
+        }
       }
       .blog-post-item-excerpt {
         display: -webkit-box;
@@ -298,9 +302,6 @@
         }
         #blog-content-back {
           display: flex;
-        }
-        .blog-post-item.is-active:not(:hover) .blog-post-item-title {
-          text-decoration: none;
         }
       }
     </style>
