@@ -1,29 +1,37 @@
 var posts = [
   {
-    title: 'SheetLabel — barcode labels and inventory from Google Sheets',
+    title: 'SheetLabel — inventory tracking and label printing inside Google Sheets',
     date: 'March 14, 2026',
     body: `
-I built [SheetLabel](https://sheetlabel.app/) because every inventory tool I tried was either too heavy or completely detached from where the data already lived — a spreadsheet.
+Most inventory tools want you to leave your spreadsheet. SheetLabel doesn't. It turns any Google Sheets spreadsheet into a barcode inventory system — scan with your phone, print labels, track stock — without installing anything beyond a sidebar.
 
-The idea is simple: stay in Google Sheets, add a sidebar, and have everything else just work.
+## The problem
 
-## What it does
+Every small inventory setup I've seen starts with a spreadsheet. Then someone decides they need barcodes, or a scanner, or real-time stock updates, and suddenly they're evaluating warehouse management software that costs more than the inventory itself. The spreadsheet was fine. It just needed a few superpowers.
 
-SheetLabel is a Google Sheets add-on. Open the sidebar, map your columns once, and you can generate print-ready barcode labels (Code 128 or QR) for any row. Six label templates cover the most common thermal printers — Brother, Dymo, Munbyn, Phomemo — plus generic shipping and price-tag sizes. Batch printing generates a single PDF for every row matching a status filter.
+## How it works
 
-The other half is a [PWA scanner](https://sheetlabel.app/) that runs entirely in the browser — no app install. Point your phone camera at a barcode, and it writes directly back to the sheet via the Google Sheets API. Check-in, check-out, and lookup workflows are built in. Scans queue offline and sync automatically when the connection comes back.
+Install the add-on, open the sidebar. SheetLabel auto-detects your columns — SKU, Name, Quantity, Status, Location — using fuzzy matching. Or click Quick Setup to generate a ready-to-use sheet in one click.
 
-## A few things I'm proud of
+From there, three things:
 
-**Smart column detection.** You don't need to name your columns exactly right. Fuzzy matching picks up SKU, Name, Quantity, Status, Location, and Timestamp automatically — and warns you if they've drifted after a save.
+**Scan.** Open a link on your phone — iPhone or Android, no app install. Point the camera at any barcode (QR, Code 128, Code 39, EAN-13, EAN-8, UPC-A, UPC-E) and the data writes directly to your sheet. Check-in, check-out, lookup. Scans queue offline and sync the moment you reconnect. Multiple people can scan the same sheet simultaneously.
 
-**Per-tab config.** Each sheet tab stores its own column mapping, so one spreadsheet can run multiple independent inventories.
+**Print.** Generate barcode labels from any row — one at a time or in bulk. Six built-in templates for Brother QL-800, Dymo LabelWriter, Munbyn 403B, Phomemo M220, plus shipping (4×6 in) and price tag (2×1 in). Labels export as high-resolution PDF with per-printer offset calibration. Works with anything that can print a PDF.
 
-**Security first.** Labels and barcodes are generated entirely client-side (jsPDF + JsBarcode). License checks go through a Cloudflare Worker with KV caching — the flow is fail-closed, so errors never accidentally grant access. SRI integrity hashes, constant-time comparisons, HMAC webhook verification, and per-user rate limiting round things out.
+**Track.** Every scan updates quantity, status, and timestamp in real time. Per-tab configuration means one spreadsheet can run multiple independent inventories across tabs.
+
+## What I got right
+
+The phone scanner connects in seconds — scan a QR code on your desktop and the phone opens already linked to the right sheet. No account creation, no pairing screens. Full local scan history so you can review every action later.
+
+Smart column detection means existing spreadsheets just work. You don't need to rename anything or restructure your data. The add-on adapts to what's already there and warns you if columns drift after a save.
+
+Privacy was non-negotiable. SheetLabel only accesses the current spreadsheet — never your Drive, contacts, or other files. Your inventory data stays entirely in your own sheet. Labels and barcodes are generated client-side. We store your email for license management and that's it.
 
 ## Stack
 
-Google Apps Script on the server side, vanilla JS in the sidebar and scanner, Cloudflare Workers for the license proxy, Jest for tests. No framework — just the platform.
+Google Apps Script, vanilla JS, Cloudflare Workers for the license proxy, Jest for tests. No framework.
 
 ---
 

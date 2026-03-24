@@ -93,6 +93,12 @@
       button {
         font: inherit;
       }
+      h2, h3 {
+        font-size: inherit;
+        font-weight: inherit;
+        margin: 0;
+        padding: 0;
+      }
       .contact-link,
       .links-toggle,
       .github-link {
@@ -166,71 +172,38 @@
         width: 50%;
         flex-shrink: 0;
         overflow-y: auto;
-        padding: var(--space-3xl) var(--space-2xl) var(--space-2xl);
+        padding: var(--space-2xl);
         box-sizing: border-box;
-        position: relative;
       }
       #blog-content-panel {
         width: 50%;
         flex-shrink: 0;
         overflow-y: auto;
-        padding: var(--space-3xl) var(--space-2xl) var(--space-2xl);
+        padding: var(--space-2xl);
         box-sizing: border-box;
-        position: relative;
       }
       .blog-back {
-        position: absolute;
-        top: var(--space-2xl);
-        left: var(--space-2xl);
-        z-index: 2;
+        margin-bottom: var(--space-lg);
       }
       .blog-post-item {
         display: block;
         text-align: left;
-        margin-bottom: var(--space-xl);
-        color: inherit;
-      }
-      .blog-post-item-title {
-        display: block;
         font-size: 1rem;
         font-weight: 400;
-        margin-bottom: var(--space-xs);
+        margin: var(--space-lg) 0 var(--space-sm);
+        color: inherit;
       }
-      .blog-post-item.nav-link:hover,
-      .blog-post-item.nav-link:active,
-      .blog-post-item.nav-link.is-active {
-        text-decoration: none;
-      }
-      .blog-post-item.is-pressed .blog-post-item-title {
+      .blog-post-item.is-pressed,
+      .blog-post-item.is-active {
         text-decoration: underline;
         text-underline-offset: 6px;
       }
-      @media (hover: hover) {
-        .blog-post-item:hover .blog-post-item-title,
-        .blog-post-item.is-active .blog-post-item-title {
-          text-decoration: underline;
-          text-underline-offset: 6px;
-        }
-      }
-      .blog-post-item-excerpt {
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        font-size: 1rem;
-        opacity: 0.65;
-      }
       .blog-content-title {
-        font-size: 1rem;
-        font-weight: 400;
-        margin: 0 0 var(--space-xs);
+        color: inherit;
+        margin: var(--space-lg) 0 var(--space-sm);
         text-decoration: underline;
       }
-      .blog-content-date {
-        font-size: 1rem;
-        opacity: 0.65;
-        margin: 0 0 var(--space-md);
-      }
+
       .blog-content-body {
         font-size: 1rem;
         opacity: 0.65;
@@ -253,13 +226,13 @@
       .blog-content-body h2 {
         font-size: 1rem;
         font-weight: 400;
-        margin: var(--space-lg) 0 var(--space-xs);
+        margin: var(--space-lg) 0 var(--space-sm);
         text-decoration: underline;
       }
       .blog-content-body h3 {
         font-size: 1rem;
         font-weight: 400;
-        margin: var(--space-md) 0 var(--space-xs);
+        margin: var(--space-md) 0 var(--space-sm);
         text-decoration: underline;
       }
       .blog-content-body p {
@@ -287,16 +260,12 @@
         margin: var(--space-lg) 0;
       }
       #blog-content-back {
-        position: absolute;
-        top: var(--space-2xl);
-        left: var(--space-2xl);
-        z-index: 2;
         display: none;
         align-items: center;
         gap: 0;
         font-family: 'Inter', sans-serif;
         font-size: 1rem;
-        max-width: calc(100% - var(--space-3xl));
+        margin-bottom: var(--space-lg);
       }
       #blog-bc-title {
         white-space: nowrap;
@@ -482,18 +451,6 @@
         return blocks.join('');
       }
 
-      function getExcerpt(text) {
-        return text
-          .replace(/!\[[^\]]*\]\([^)]+\)/g, '')
-          .replace(/\[[^\]]+\]\([^)]+\)/g, function(m) { return m.match(/\[([^\]]+)\]/)[1]; })
-          .replace(/#{1,3}\s+/g, '')
-          .replace(/^>\s?/gm, '')
-          .replace(/`([^`]+)`/g, '$1')
-          .replace(/\*\*/g, '').replace(/\*/g, '')
-          .replace(/^---+$/gm, '')
-          .replace(/\s+/g, ' ').trim();
-      }
-
       function openPost(index, silent) {
         var post = posts[index];
         blogList.querySelectorAll('.blog-post-item').forEach(function(btn, i) {
@@ -512,8 +469,7 @@
         btn.type = 'button';
         btn.className = 'nav-link blog-post-item';
         var safeTitle = post.title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        var excerpt = getExcerpt(post.body);
-        btn.innerHTML = '<span class="blog-post-item-title">' + safeTitle + '</span><span class="blog-post-item-excerpt">' + excerpt + '</span>';
+        btn.innerHTML = safeTitle;
         btn.addEventListener('click', function() { openPost(i); });
         blogList.appendChild(btn);
       });
