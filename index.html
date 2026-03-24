@@ -100,8 +100,7 @@
         padding: 0;
       }
       .contact-link,
-      .links-toggle,
-      .github-link {
+      .links-toggle {
         position: absolute;
         bottom: 20%;
         z-index: 2;
@@ -110,12 +109,8 @@
       .contact-link {
         left: 25%;
       }
-      .links-toggle,
-      .github-link {
+      .links-toggle {
         left: 75%;
-      }
-      .github-link {
-        bottom: calc(20% - var(--space-xl));
       }
       .skills-toggle {
         position: absolute;
@@ -131,23 +126,41 @@
         z-index: 2;
         transform: translateX(-50%);
       }
-      .skills-text {
-        position: absolute;
-        top: calc(20% + var(--space-xl));
-        left: 25%;
-        z-index: 2;
-        transform: translateX(-50%);
+
+      .is-hidden {
+        display: none;
+      }
+      #links-screen {
+        position: fixed;
+        top: 0;
+        left: 50%;
+        width: 50%;
+        height: 100%;
+        transform: translateX(100%);
+        transition: transform 0.7s cubic-bezier(0.77, 0, 0.175, 1);
+      }
+      #skills-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 50%;
+        height: 100%;
+        transform: translateX(-100%);
+        transition: transform 0.7s cubic-bezier(0.77, 0, 0.175, 1);
+      }
+      .side-panel-items {
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
+        height: 100%;
+        padding: var(--space-2xl);
+        box-sizing: border-box;
         gap: 0;
         white-space: nowrap;
       }
-      .skills-text p {
+      .side-panel-items p {
         margin: 0;
-      }
-      .is-hidden {
-        display: none;
       }
       #main-screen {
         position: fixed;
@@ -165,7 +178,6 @@
         display: flex;
         width: 100%;
         height: 100%;
-        font-family: 'Inter', sans-serif;
         transition: transform 0.7s cubic-bezier(0.77, 0, 0.175, 1);
       }
       #blog-list-panel {
@@ -199,11 +211,13 @@
         text-underline-offset: 6px;
       }
       .blog-content-title {
-        color: inherit;
         margin: var(--space-lg) 0 var(--space-sm);
         text-decoration: underline;
       }
-
+      .blog-content-date {
+        margin: 0 0 var(--space-sm);
+        opacity: 0.65;
+      }
       .blog-content-body {
         font-size: 1rem;
         opacity: 0.65;
@@ -228,12 +242,14 @@
         font-weight: 400;
         margin: var(--space-lg) 0 var(--space-sm);
         text-decoration: underline;
+        opacity: 1;
       }
       .blog-content-body h3 {
         font-size: 1rem;
         font-weight: 400;
         margin: var(--space-md) 0 var(--space-sm);
         text-decoration: underline;
+        opacity: 1;
       }
       .blog-content-body p {
         margin: 0 0 var(--space-sm);
@@ -241,16 +257,13 @@
       .blog-content-body code {
         font-family: 'Courier New', Courier, monospace;
         font-size: 1em;
-        opacity: 0.65;
         background: rgba(128,128,128,0.12);
         padding: 0.1em 0.35em;
-        border-radius: 3px;
       }
       .blog-content-body blockquote {
         margin: var(--space-md) 0;
         padding-left: var(--space-sm);
         border-left: 2px solid currentColor;
-        opacity: 0.65;
         font-style: italic;
       }
       .blog-content-body hr {
@@ -263,7 +276,6 @@
         display: none;
         align-items: center;
         gap: 0;
-        font-family: 'Inter', sans-serif;
         font-size: 1rem;
         margin-bottom: var(--space-lg);
       }
@@ -311,15 +323,10 @@
       </h1>
     </div>
 
-    <button id="skills-toggle" type="button" class="nav-link skills-toggle" aria-expanded="false" aria-controls="skills-text">
+    <button id="skills-toggle" type="button" class="nav-link skills-toggle">
       Skills
     </button>
-    <div id="skills-text" class="skills-text is-hidden" aria-hidden="true">
-      <p>AWS, Terraform</p>
-      <p>Kubernetes</p>
-      <p>GitHub Actions</p>
-      <p>Web Applications</p>
-    </div>
+
 
     <a id="contact-link" href="mailto:bluer.mullion.0h@icloud.com" class="nav-link contact-link">
       Contact
@@ -329,14 +336,25 @@
       Latest
     </button>
 
-    <button id="links-toggle" type="button" class="nav-link links-toggle" aria-expanded="false" aria-controls="github-link">
+    <button id="links-toggle" type="button" class="nav-link links-toggle">
       Links
     </button>
 
-    <a id="github-link" href="https://github.com/andreacarpini" target="_blank" rel="noopener noreferrer" class="nav-link github-link is-hidden">
-      GitHub
-    </a>
+    </div>
 
+    <div id="links-screen">
+      <div class="side-panel-items">
+        <a href="https://github.com/andreacarpini" target="_blank" rel="noopener noreferrer" class="nav-link">GitHub</a>
+      </div>
+    </div>
+
+    <div id="skills-screen">
+      <div class="side-panel-items">
+        <p>AWS, Terraform</p>
+        <p>Kubernetes</p>
+        <p>GitHub Actions</p>
+        <p>Web Applications</p>
+      </div>
     </div>
 
     <div id="blog-screen">
@@ -370,11 +388,11 @@
       const rightName = document.getElementById('right-name');
       const contactLink = document.getElementById('contact-link');
       const linksToggle = document.getElementById('links-toggle');
-      const githubLink = document.getElementById('github-link');
       const latestLink = document.getElementById('latest-link');
       const skillsToggle = document.getElementById('skills-toggle');
-      const skillsText = document.getElementById('skills-text');
-      const skillItems = skillsText ? skillsText.querySelectorAll('p') : [];
+      const linksScreen = document.getElementById('links-screen');
+      const skillsScreen = document.getElementById('skills-screen');
+      let activeSidePanel = null;
       const mainScreen = document.getElementById('main-screen');
       const blogScreen = document.getElementById('blog-screen');
       const blogBack = document.getElementById('blog-back-btn');
@@ -396,12 +414,13 @@
       rightName.style.color = rightText;
       contactLink.style.color = leftText;
       linksToggle.style.color = rightText;
-      githubLink.style.color = rightText;
       latestLink.style.color = rightText;
       skillsToggle.style.color = leftText;
-      skillItems.forEach(function (item) {
-        item.style.color = leftText;
-      });
+
+      linksScreen.style.background = leftBg;
+      linksScreen.style.color = leftText;
+      skillsScreen.style.background = rightBg;
+      skillsScreen.style.color = rightText;
 
       blogListPanel.style.background = leftBg;
       blogListPanel.style.color = leftText;
@@ -476,30 +495,27 @@
 
       if (window.innerWidth > 768) { openPost(0, true); }
 
-      function closeLinks() {
-        githubLink.classList.add('is-hidden');
-        linksToggle.classList.remove('is-open');
-        linksToggle.setAttribute('aria-expanded', 'false');
+      function openSidePanel(name) {
+        var screen = name === 'links' ? linksScreen : skillsScreen;
+        var toggle = name === 'links' ? linksToggle : skillsToggle;
+        activeSidePanel = name;
+        if (name === 'links') {
+          mainScreen.style.transform = 'translateX(-50%)';
+        } else {
+          mainScreen.style.transform = 'translateX(50%)';
+        }
+        screen.style.transform = 'translateX(0)';
+        toggle.classList.add('is-open');
       }
 
-      function openLinks() {
-        githubLink.classList.remove('is-hidden');
-        linksToggle.classList.add('is-open');
-        linksToggle.setAttribute('aria-expanded', 'true');
-      }
-
-      function closeSkills() {
-        skillsText.classList.add('is-hidden');
-        skillsText.setAttribute('aria-hidden', 'true');
-        skillsToggle.classList.remove('is-open');
-        skillsToggle.setAttribute('aria-expanded', 'false');
-      }
-
-      function openSkills() {
-        skillsText.classList.remove('is-hidden');
-        skillsText.setAttribute('aria-hidden', 'false');
-        skillsToggle.classList.add('is-open');
-        skillsToggle.setAttribute('aria-expanded', 'true');
+      function closeSidePanel() {
+        if (!activeSidePanel) return;
+        var screen = activeSidePanel === 'links' ? linksScreen : skillsScreen;
+        var toggle = activeSidePanel === 'links' ? linksToggle : skillsToggle;
+        mainScreen.style.transform = '';
+        screen.style.transform = '';
+        toggle.classList.remove('is-open');
+        activeSidePanel = null;
       }
 
       function setTouchLink(nextLink) {
@@ -529,26 +545,31 @@
       }
 
       linksToggle.addEventListener('click', function () {
-        const isOpen = !githubLink.classList.contains('is-hidden');
-        if (isOpen) {
-          closeLinks();
-          return;
+        if (activeSidePanel === 'links') {
+          closeSidePanel();
+        } else {
+          closeSidePanel();
+          openSidePanel('links');
         }
-        openLinks();
       });
 
       skillsToggle.addEventListener('click', function () {
-        const isOpen = !skillsText.classList.contains('is-hidden');
-        if (isOpen) {
-          closeSkills();
-          return;
+        if (activeSidePanel === 'skills') {
+          closeSidePanel();
+        } else {
+          closeSidePanel();
+          openSidePanel('skills');
         }
-        openSkills();
       });
 
       latestLink.addEventListener('click', function () {
-        closeLinks();
-        closeSkills();
+        if (activeSidePanel) {
+          var screen = activeSidePanel === 'links' ? linksScreen : skillsScreen;
+          var toggle = activeSidePanel === 'links' ? linksToggle : skillsToggle;
+          screen.style.transform = '';
+          toggle.classList.remove('is-open');
+          activeSidePanel = null;
+        }
         mainScreen.style.transform = 'translateX(-100%)';
         blogScreen.style.transform = 'translateX(0)';
         blogBackLabel.classList.add('is-active');
@@ -590,17 +611,16 @@
       });
 
       document.addEventListener('mousedown', function (event) {
+        if (!activeSidePanel) return;
+        var screen = activeSidePanel === 'links' ? linksScreen : skillsScreen;
+        var toggle = activeSidePanel === 'links' ? linksToggle : skillsToggle;
         if (
-          linksToggle.contains(event.target) ||
-          githubLink.contains(event.target) ||
-          skillsToggle.contains(event.target) ||
-          skillsText.contains(event.target)
+          toggle.contains(event.target) ||
+          screen.contains(event.target)
         ) {
           return;
         }
-
-        closeLinks();
-        closeSkills();
+        closeSidePanel();
       });
 
       document.addEventListener('touchstart', function (event) {
