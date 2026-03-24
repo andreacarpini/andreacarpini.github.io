@@ -11,13 +11,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
     <style>
       :root {
-        --space-xs:  0.4rem;  /* tight inline gap: heading→content */
         --space-sm:  1rem;    /* small indent */
         --space-md:  1.5rem;  /* standard rhythm: date, h3, images */
         --space-lg:  2rem;    /* section break: h2 top, hr */
         --space-xl:  2.5rem;  /* item / stack spacing */
         --space-2xl: 3rem;    /* panel edge padding */
-        --space-3xl: 6rem;    /* panel top (2 × panel-edge) */
       }
       html, body {
         overflow: hidden;
@@ -29,7 +27,6 @@
         font-family: 'Inter', sans-serif;
         line-height: 1.8;
         background-color: #000;
-        color: #1A1A1A;
         -webkit-font-smoothing: antialiased;
       }
       .panel {
@@ -159,6 +156,9 @@
         gap: 0;
         white-space: nowrap;
       }
+      .side-panel-items a {
+        color: inherit;
+      }
       .side-panel-items p {
         margin: 0;
       }
@@ -215,7 +215,6 @@
         text-decoration: underline;
       }
       .blog-content-date {
-        margin: 0 0 var(--space-sm);
         opacity: 0.65;
       }
       .blog-content-body {
